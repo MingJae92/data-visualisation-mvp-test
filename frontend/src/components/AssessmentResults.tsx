@@ -2,6 +2,18 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import './AssessmentResults.css'
 
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_API_URL: string
+  // Add any other env variables you use, e.g.
+  // readonly VITE_OTHER_KEY: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
+
 interface AssessmentResults {
   instance: {
     id: string
@@ -35,26 +47,28 @@ export default function AssessmentResults({ instanceId }: Props) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!instanceId) return
+  if (!instanceId) return
 
-    const fetchResults = async () => {
-      setLoading(true)
-      setError(null)
-
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL || 'http://localhost:8002'}/api/assessment/results/${instanceId}`
-        )
-        setResults(response.data)
-      } catch (err: any) {
-        setError(err.response?.data?.error || 'Failed to load assessment results')
-      } finally {
-        setLoading(false)
-      }
+  const fetchResults = async () => {
+    setLoading(true)
+    setError(null)
+console.log('API URL:', import.meta.env.VITE_API_URL)
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL || 'http://localhost:8002'}/api/assessment/results/${instanceId}`
+      )
+      setResults(response.data)
+      
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to load assessment results')
+      console.log(err)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    fetchResults()
-  }, [instanceId])
+  fetchResults()
+}, [instanceId])
 
   if (loading) {
     return <div className="loading">Loading results...</div>
