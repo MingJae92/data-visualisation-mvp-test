@@ -1,18 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import axios from 'axios'
 import './AssessmentResults.css'
-
-/// <reference types="vite/client" />
-
-interface ImportMetaEnv {
-  readonly VITE_API_URL: string
-  // Add any other env variables you use, e.g.
-  // readonly VITE_OTHER_KEY: string
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv
-}
+import {
+  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
+} from 'recharts'
 
 interface AssessmentResults {
   instance: {
@@ -46,47 +38,54 @@ export default function AssessmentResults({ instanceId }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Fetch results
   useEffect(() => {
-  if (!instanceId) return
+    if (!instanceId) return
 
-  const fetchResults = async () => {
-    setLoading(true)
-    setError(null)
-console.log('API URL:', import.meta.env.VITE_API_URL)
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:8002'}/api/assessment/results/${instanceId}`
-      )
-      setResults(response.data)
-      
-    } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to load assessment results')
-      console.log(err)
-    } finally {
-      setLoading(false)
+    const fetchResults = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL || 'http://localhost:8002'}/api/assessment/results/${instanceId}`
+        )
+        setResults(response.data)
+      } catch (err: any) {
+        setError(err.response?.data?.error || 'Failed to load assessment results')
+      } finally {
+        setLoading(false)
+      }
     }
-  }
 
-  fetchResults()
-}, [instanceId])
+    fetchResults()
+  }, [instanceId])
 
-  if (loading) {
-    return <div className="loading">Loading results...</div>
-  }
+  // Always run hooks, even if results is null
+  const radarData = useMemo(() => {
+    if (!results) return []
+    return Object.values(results.element_scores).map((el: any) => ({
+      element: el.element,
+      score: el.scores.percentage
+    }))
+  }, [results])
 
-  if (error) {
-    return <div className="error">Error: {error}</div>
-  }
-
-  if (!results) {
-    return <div className="empty">No results to display</div>
-  }
+  const barData = useMemo(() => {
+    if (!results) return []
+    return Object.values(results.element_scores).map((el: any) => ({
+      element: el.element,
+      percentage: el.scores.percentage
+    }))
+  }, [results])
 
   const getScoreColor = (percentage: number) => {
     if (percentage >= 80) return '#27ae60'
     if (percentage >= 60) return '#f39c12'
     return '#e74c3c'
   }
+
+  if (loading) return <div className="loading">Loading results...</div>
+  if (error) return <div className="error">Error: {error}</div>
+  if (!results) return <div className="empty">No results to display</div>
 
   return (
     <div className="assessment-results">
@@ -100,14 +99,7 @@ console.log('API URL:', import.meta.env.VITE_API_URL)
         <h3>Progress</h3>
         <div className="progress-circle">
           <svg width="120" height="120" viewBox="0 0 120 120">
-            <circle
-              cx="60"
-              cy="60"
-              r="54"
-              fill="none"
-              stroke="#e0e0e0"
-              strokeWidth="12"
-            />
+            <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0" strokeWidth="12" />
             <circle
               cx="60"
               cy="60"
@@ -134,10 +126,7 @@ console.log('API URL:', import.meta.env.VITE_API_URL)
       <div className="card score-card">
         <h3>Overall Score</h3>
         <div className="score-display">
-          <div
-            className="score-percentage"
-            style={{ color: getScoreColor(results.scores.percentage) }}
-          >
+          <div className="score-percentage" style={{ color: getScoreColor(results.scores.percentage) }}>
             {results.scores.percentage}%
           </div>
           <div className="score-details">
@@ -146,6 +135,38 @@ console.log('API URL:', import.meta.env.VITE_API_URL)
           </div>
         </div>
       </div>
+
+      {/* Radar Chart */}
+      {radarData.length > 0 && (
+        <div className="card radar-chart-card">
+          <h3>Element Scores Radar</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <RadarChart data={radarData}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="element" />
+              <PolarRadiusAxis angle={30} domain={[0, 100]} />
+              <Radar name="Score" dataKey="score" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {/* Bar Chart */}
+      {barData.length > 0 && (
+        <div className="card bar-chart-card">
+          <h3>Element Scores Bar</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={barData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="element" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="percentage" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
 
       {/* Element Scores */}
       {Object.keys(results.element_scores).length > 0 && (
@@ -188,10 +209,7 @@ console.log('API URL:', import.meta.env.VITE_API_URL)
           <h3>Insights</h3>
           <div className="insights">
             {results.insights.map((insight, index) => (
-              <div
-                key={index}
-                className={`insight ${insight.positive ? 'positive' : 'negative'}`}
-              >
+              <div key={index} className={`insight ${insight.positive ? 'positive' : 'negative'}`}>
                 <span className="insight-type">{insight.type}</span>
                 <p className="insight-message">{insight.message}</p>
               </div>
