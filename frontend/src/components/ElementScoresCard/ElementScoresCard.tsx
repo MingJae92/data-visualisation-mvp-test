@@ -1,7 +1,9 @@
 import styles from './ElementScoresCard.module.css'
 import { getScoreColor } from '../../utils/scoreUtils'
 
-interface Props { elementScores: Record<string, any> }
+interface Props {
+  elementScores: Record<string, any>
+}
 
 export default function ElementScoresCard({ elementScores }: Props) {
   const elements = Object.values(elementScores)
@@ -12,7 +14,6 @@ export default function ElementScoresCard({ elementScores }: Props) {
       <h3>Scores by Element</h3>
       <div className={styles.elementScores}>
         {elements.map((el: any) => {
-          // Prepare mini question breakdown
           const answeredQuestions = el.question_answers.filter((q: any) => q.is_answered && !q.is_reflection)
           const unansweredQuestions = el.question_answers.filter((q: any) => !q.is_answered && !q.is_reflection)
           const reflectionQuestions = el.question_answers.filter((q: any) => q.is_reflection)
@@ -39,23 +40,35 @@ export default function ElementScoresCard({ elementScores }: Props) {
                 <span>{el.scores.total_score} / {el.scores.max_score} points</span>
               </div>
 
-              {/* Mini Question Breakdown with Icons */}
+              {/* Mini Question Breakdown: tooltips only on emoji */}
               <div className={styles.miniQuestionBreakdown}>
-                {answeredQuestions.length > 0 && (
-                  <div className={styles.answered}>
-                    <strong>✅ Answered:</strong> {answeredQuestions.map((q: any) => `"${q.question_title}"`).join(', ')}
+                {answeredQuestions.map((q: any) => (
+                  <div key={q.question_id} className={styles.questionIcon}>
+                    ✅
+                    <span className={styles.tooltipText}>
+                      {q.question_title} <br/>
+                      Answer: {q.answer_text || 'N/A'} | Score: {q.answer_value}/{q.max_score}
+                    </span>
                   </div>
-                )}
-                {unansweredQuestions.length > 0 && (
-                  <div className={styles.unanswered}>
-                    <strong>❌ Unanswered:</strong> {unansweredQuestions.map((q: any) => `"${q.question_title}"`).join(', ')}
+                ))}
+
+                {unansweredQuestions.map((q: any) => (
+                  <div key={q.question_id} className={styles.questionIcon}>
+                    ❌
+                    <span className={styles.tooltipText}>
+                      {q.question_title} <br/>Not answered
+                    </span>
                   </div>
-                )}
-                {reflectionQuestions.length > 0 && (
-                  <div className={styles.reflection}>
-                    <strong>📝 Reflection:</strong> {reflectionQuestions.map((q: any) => `"${q.reflection_prompt || q.question_title}"`).join(', ')}
+                ))}
+
+                {reflectionQuestions.map((q: any) => (
+                  <div key={q.question_id} className={styles.questionIcon}>
+                    📝
+                    <span className={styles.tooltipText}>
+                      {q.question_title} <br/>Prompt: {q.reflection_prompt || 'N/A'}
+                    </span>
                   </div>
-                )}
+                ))}
               </div>
             </div>
           )
