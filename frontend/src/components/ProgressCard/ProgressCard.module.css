@@ -4,6 +4,11 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+  text-align: center; /* center all inline content by default */
+}
+
+.card h3 {
+  margin-bottom: 1rem; /* spacing from the circle */
 }
 
 .progressCircle {
@@ -18,16 +23,19 @@
   position: absolute;
   text-align: center;
 }
+
 .progressPercentage {
   font-size: 1.3rem;
   font-weight: bold;
   display: block;
   color: #3498db;
 }
+
 .progressLabel {
   font-size: 0.9rem;
   color: #7f8c8d;
 }
+
 .progressDetails {
   font-size: 0.9rem;
   color: #34495e;
