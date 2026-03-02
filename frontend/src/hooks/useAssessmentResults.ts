@@ -18,6 +18,7 @@ export function useAssessmentResults(instanceId: string) {
           `${import.meta.env.VITE_API_URL || 'http://localhost:8002'}/api/assessment/results/${instanceId}`
         )
         setResults(res.data)
+        console.log(res.data)
       } catch (err: any) {
         setError(err.response?.data?.error || 'Failed to load assessment results')
       } finally {
