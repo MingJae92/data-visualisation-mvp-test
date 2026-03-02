@@ -52,3 +52,15 @@
 .miniQuestionBreakdown strong {
   font-weight: 600;
 }
+
+.answered {
+  color: #27ae60;
+}
+
+.unanswered {
+  color: #e74c3c;
+}
+
+.reflection {
+  color: #f39c12;
+}

@@ -39,21 +39,21 @@ export default function ElementScoresCard({ elementScores }: Props) {
                 <span>{el.scores.total_score} / {el.scores.max_score} points</span>
               </div>
 
-              {/* Mini Question Breakdown */}
+              {/* Mini Question Breakdown with Icons */}
               <div className={styles.miniQuestionBreakdown}>
                 {answeredQuestions.length > 0 && (
-                  <div style={{ color: '#27ae60' }}>
-                    <strong>Answered:</strong> {answeredQuestions.map((q: any) => `"${q.question_title}"`).join(', ')}
+                  <div className={styles.answered}>
+                    <strong>✅ Answered:</strong> {answeredQuestions.map((q: any) => `"${q.question_title}"`).join(', ')}
                   </div>
                 )}
                 {unansweredQuestions.length > 0 && (
-                  <div style={{ color: '#e74c3c' }}>
-                    <strong>Unanswered:</strong> {unansweredQuestions.map((q: any) => `"${q.question_title}"`).join(', ')}
+                  <div className={styles.unanswered}>
+                    <strong>❌ Unanswered:</strong> {unansweredQuestions.map((q: any) => `"${q.question_title}"`).join(', ')}
                   </div>
                 )}
                 {reflectionQuestions.length > 0 && (
-                  <div style={{ color: '#f39c12' }}>
-                    <strong>Reflection:</strong> {reflectionQuestions.map((q: any) => `"${q.reflection_prompt || q.question_title}"`).join(', ')}
+                  <div className={styles.reflection}>
+                    <strong>📝 Reflection:</strong> {reflectionQuestions.map((q: any) => `"${q.reflection_prompt || q.question_title}"`).join(', ')}
                   </div>
                 )}
               </div>
