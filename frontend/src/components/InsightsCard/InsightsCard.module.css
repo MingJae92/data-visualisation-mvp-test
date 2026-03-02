@@ -1,0 +1,8 @@
+/* InsightsCard.module.css */
+.card { background:#fff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05); padding:1.5rem; margin-bottom:1.5rem; }
+.insights { display:flex; flex-direction:column; gap:0.8rem; }
+.insight { padding:0.7rem; border-radius:8px; }
+.positive { background:#eafaf1; color:#27ae60; }
+.negative { background:#fdecea; color:#e74c3c; }
+.insightType { font-weight:bold; font-size:0.85rem; display:block; }
+.insightMessage { margin:0.3rem 0 0 0; font-size:0.85rem; }
