@@ -7,18 +7,29 @@ interface Props {
 
 export default function ScoreCard({ scores }: Props) {
   return (
-    <div className={styles.card}>
-      <h3>Overall Score</h3>
+    <div
+      className={styles.card}
+      role="region"
+      aria-labelledby="overall-score-heading"
+    >
+      <h3 id="overall-score-heading">Overall Score</h3>
+
       <div className={styles.scoreDisplay}>
         <div
           className={styles.scorePercentage}
           style={{ color: getScoreColor(scores.percentage) }}
+          aria-label={`Overall score ${scores.percentage} percent`}
         >
           {scores.percentage}%
         </div>
+
         <div className={styles.scoreDetails}>
-          <p>{scores.total_score} / {scores.max_score} points</p>
-          <p className={styles.scoreNote}>Normalized from 1-5 scale</p>
+          <p>
+            <strong>{scores.total_score}</strong> / {scores.max_score} points
+          </p>
+          <p className={styles.scoreNote}>
+            Normalized from 1–5 scale
+          </p>
         </div>
       </div>
     </div>

@@ -17,19 +17,39 @@ export default function QuestionBreakdownCard({ questions }: Props) {
 
   return (
     <div className={styles.card}>
-      <h3>Question Breakdown</h3>
-      <ul className={styles.questionList}>
-        {questions.map(q => {
-          let status: 'answered' | 'unanswered' | 'reflection' = 'unanswered'
+      <h3 id="question-breakdown-heading">Question Breakdown</h3>
 
-          if (q.is_reflection) status = 'reflection'
-          else if (q.is_answered) status = 'answered'
+      <ul
+        className={styles.questionList}
+        aria-labelledby="question-breakdown-heading"
+      >
+        {questions.map((q) => {
+          let status: 'answered' | 'unanswered' | 'reflection' = 'unanswered'
+          let statusLabel = 'Not answered'
+
+          if (q.is_reflection) {
+            status = 'reflection'
+            statusLabel = 'Reflection question'
+          } else if (q.is_answered) {
+            status = 'answered'
+            statusLabel = 'Answered'
+          }
 
           return (
             <li key={q.question_id} className={styles[status]}>
               <span className={styles.text}>{q.question_title}</span>
-              <span className={styles.status}>
+
+              {/* Visual icon */}
+              <span
+                className={styles.status}
+                aria-hidden="true"
+              >
                 {status === 'answered' ? '✅' : status === 'unanswered' ? '❌' : '📝'}
+              </span>
+
+              {/* Screen-reader-only text */}
+              <span className={styles.srOnly}>
+                {statusLabel}
               </span>
             </li>
           )

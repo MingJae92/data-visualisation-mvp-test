@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './ElementScoresCard.module.css'
 import { getScoreColor } from '../../utils/scoreUtils'
 
@@ -11,6 +11,18 @@ export default function ElementScoresCard({ elementScores }: Props) {
   const [activeQuestion, setActiveQuestion] = useState<any | null>(null)
 
   if (!elements.length) return null
+
+  // Close modal with Escape key
+  useEffect(() => {
+    if (!activeQuestion) return
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveQuestion(null)
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [activeQuestion])
 
   return (
     <div className={styles.card}>
@@ -39,7 +51,14 @@ export default function ElementScoresCard({ elementScores }: Props) {
               </div>
 
               {/* Progress */}
-              <div className={styles.elementProgressBar}>
+              <div
+                className={styles.elementProgressBar}
+                role="progressbar"
+                aria-label={`Element ${el.element} completion`}
+                aria-valuenow={el.completion_percentage}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              >
                 <div
                   className={styles.elementProgressFill}
                   style={{
@@ -63,6 +82,7 @@ export default function ElementScoresCard({ elementScores }: Props) {
                     className={`${styles.icon} ${styles.answered}`}
                     role="button"
                     tabIndex={0}
+                    aria-label={`Answered question. Score ${q.answer_value} out of ${q.max_score}`}
                     onClick={() => setActiveQuestion(q)}
                     onKeyDown={(e) =>
                       (e.key === 'Enter' || e.key === ' ') && setActiveQuestion(q)
@@ -81,6 +101,7 @@ export default function ElementScoresCard({ elementScores }: Props) {
                     className={`${styles.icon} ${styles.unanswered}`}
                     role="button"
                     tabIndex={0}
+                    aria-label="Unanswered question"
                     onClick={() => setActiveQuestion(q)}
                     onKeyDown={(e) =>
                       (e.key === 'Enter' || e.key === ' ') && setActiveQuestion(q)
@@ -97,6 +118,7 @@ export default function ElementScoresCard({ elementScores }: Props) {
                     className={`${styles.icon} ${styles.reflection}`}
                     role="button"
                     tabIndex={0}
+                    aria-label="Reflection question"
                     onClick={() => setActiveQuestion(q)}
                     onKeyDown={(e) =>
                       (e.key === 'Enter' || e.key === ' ') && setActiveQuestion(q)
@@ -120,9 +142,12 @@ export default function ElementScoresCard({ elementScores }: Props) {
         >
           <div
             className={styles.modal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="question-title"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3>{activeQuestion.question_title}</h3>
+            <h3 id="question-title">{activeQuestion.question_title}</h3>
 
             {!activeQuestion.is_reflection ? (
               <>
@@ -156,6 +181,7 @@ export default function ElementScoresCard({ elementScores }: Props) {
 
             <button
               className={styles.close}
+              aria-label="Close question details"
               onClick={() => setActiveQuestion(null)}
             >
               Close
