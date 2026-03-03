@@ -1,4 +1,59 @@
 /* ResultsHeader.module.css */
-.resultsHeader { margin-bottom: 1rem; }
-.title { font-size: 1.8rem; margin-bottom: 0.2rem; color: #2c3e50; }
-.instanceId { font-size: 0.9rem; color: #7f8c8d; }
+
+.resultsHeader {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem; /* spacing between title and instance ID */
+}
+
+/* Title adjusts based on viewport width */
+.title {
+  font-size: clamp(1.5rem, 4vw, 2rem); /* scales between 1.5rem and 2rem */
+  margin-bottom: 0;
+  color: #2c3e50;
+  line-height: 1.2;
+  word-break: break-word; /* prevent overflow on small devices */
+}
+
+/* Instance ID styling */
+.instanceId {
+  font-size: clamp(0.8rem, 2.5vw, 1rem); /* scales with screen */
+  color: #7f8c8d;
+  word-break: break-all;
+  overflow-wrap: anywhere; /* handle very long strings */
+}
+
+/* Larger screens: horizontal layout */
+@media (min-width: 768px) {
+  .resultsHeader {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .title {
+    margin-bottom: 0;
+  }
+
+  .instanceId {
+    text-align: right;
+  }
+}
+
+/* Optional: very small screens */
+@media (max-width: 400px) {
+  .resultsHeader {
+    gap: 0.25rem;
+  }
+
+  .title {
+    font-size: clamp(1.3rem, 6vw, 1.5rem);
+  }
+
+  .instanceId {
+    font-size: clamp(0.7rem, 4vw, 0.9rem);
+  }
+}

@@ -2,26 +2,37 @@
   background: #fff;
   padding: 16px;
   border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* Container for all elements */
 .elementScores {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+/* Each element score card */
 .elementScore {
   border: 1px solid #eee;
   border-radius: 10px;
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
+/* Header with score */
 .elementHeader {
   display: flex;
   justify-content: space-between;
   font-weight: 600;
+  flex-wrap: wrap; /* wrap for small screens */
+  gap: 4px;
 }
 
+/* Progress bar container */
 .elementProgressBar {
   height: 6px;
   background: #eee;
@@ -29,21 +40,28 @@
   margin: 8px 0;
 }
 
+/* Progress fill */
 .elementProgressFill {
   height: 100%;
   border-radius: 4px;
+  transition: width 0.3s ease-in-out;
 }
 
+/* Details row */
 .elementDetails {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: clamp(0.75rem, 2vw, 0.875rem); /* responsive text */
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 8px;
 }
 
+/* Mini breakdown container */
 .miniQuestionBreakdown {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
   margin-top: 6px;
 }
 
@@ -67,15 +85,12 @@
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .icon:hover .tooltip {
   opacity: 1;
 }
-
-.answered { }
-.unanswered { }
-.reflection { }
 
 /* Drill-down modal */
 .overlay {
@@ -94,6 +109,8 @@
   border-radius: 14px;
   width: 90%;
   max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .close {
@@ -102,4 +119,21 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .elementHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .elementDetails {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .miniQuestionBreakdown {
+    justify-content: flex-start;
+  }
 }

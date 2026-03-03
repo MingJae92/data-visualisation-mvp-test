@@ -4,31 +4,49 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  text-align: center; /* center all inline content like h3 */
+  text-align: center;
 }
 
 .card h3 {
   margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 4vw, 1.6rem); /* scales for all screens */
 }
 
 .scoreDisplay {
   display: flex;
-  flex-direction: column; /* stack percentage and details vertically */
-  align-items: center;    /* center horizontally */
-  justify-content: center; /* optional: center vertically if needed */
-  gap: 0.5rem;            /* spacing between percentage and details */
+  flex-direction: column; /* always stacked */
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .scorePercentage {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 6vw, 2.5rem); /* scales with screen */
   font-weight: bold;
 }
 
 .scoreDetails p {
   margin: 0.2rem 0;
+  font-size: clamp(0.85rem, 2.5vw, 1rem); /* responsive text */
 }
 
 .scoreNote {
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
   color: #95a5a6;
+  margin-top: 0.2rem;
+}
+
+/* Optional: Adjust spacing on very small screens */
+@media (max-width: 400px) {
+  .card {
+    padding: 1rem;
+  }
+
+  .scorePercentage {
+    font-size: clamp(1.3rem, 5vw, 2rem);
+  }
+
+  .scoreDetails p {
+    font-size: clamp(0.75rem, 2.2vw, 0.9rem);
+  }
 }

@@ -1,11 +1,67 @@
-/* InsightsCard.module.css */
-.card { background:#fff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05); padding:1.5rem; margin-bottom:1.5rem; }
-.insights { display:flex; flex-direction:column; gap:0.8rem; }
-.insight { padding:0.7rem; border-radius:8px; }
-.positive { background:#eafaf1; color:#27ae60; }
-.negative { background:#fdecea; color:#e74c3c; }
-.insightType { font-weight:bold; font-size:0.85rem; display:block; }
-.insightMessage { margin:0.3rem 0 0 0; font-size:0.85rem; }
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: box-shadow 0.3s ease; /* smooth transition for hover effect */
+}
+
+/* Container for all insights */
+.insights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+/* Each individual insight */
+.insight {
+  padding: 0.7rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1 1 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* smooth hover */
+}
+
+/* Hover effect for desktop */
+@media (min-width: 769px) {
+  .insight:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+}
+
+/* Positive/negative background and text */
+.positive {
+  background: #eafaf1;
+  color: #27ae60;
+}
+
+.negative {
+  background: #fdecea;
+  color: #e74c3c;
+}
+
+/* Type of insight (bold label) */
+.insightType {
+  font-weight: bold;
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  display: block;
+}
+
+/* Insight message */
+.insightMessage {
+  margin: 0;
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  word-break: break-word;
+}
+
+/* Screen-reader only text */
 .srOnly {
   position: absolute;
   width: 1px;
@@ -16,4 +72,65 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Heading responsive */
+h3 {
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .insights {
+    flex-direction: column;
+  }
+
+  .insight {
+    flex: 1 1 100%;
+    padding: 0.6rem;
+  }
+
+  .insightType,
+  .insightMessage {
+    font-size: 0.8rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 481px) and (max-width: 768px) {
+  .insights {
+    flex-direction: column;
+  }
+
+  .insight {
+    flex: 1 1 100%;
+    padding: 0.7rem;
+  }
+
+  .insightType,
+  .insightMessage {
+    font-size: 0.85rem;
+  }
+
+  h3 {
+    font-size: 1.35rem;
+  }
+}
+
+/* Desktop: display insights side by side */
+@media (min-width: 769px) {
+  .insights {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .insight {
+    flex: 1 1 calc(50% - 1rem); /* two insights per row */
+  }
 }

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import styles from './ProgressCard.module.css'
 
 interface Props {
@@ -7,6 +8,16 @@ interface Props {
 }
 
 export default function ProgressCard({ completion, answered, total }: Props) {
+  const [animatedCompletion, setAnimatedCompletion] = useState(0)
+
+  // Animate circle on mount / update
+  useEffect(() => {
+    const timeout = setTimeout(() => setAnimatedCompletion(completion), 50)
+    return () => clearTimeout(timeout)
+  }, [completion])
+
+  const circumference = 2 * Math.PI * 54 // r=54
+
   return (
     <div className={styles.card}>
       <h3 id="progress-heading">Progress</h3>
@@ -19,13 +30,7 @@ export default function ProgressCard({ completion, answered, total }: Props) {
         aria-valuemin={0}
         aria-valuemax={100}
       >
-        {/* Decorative SVG */}
-        <svg
-          width="120"
-          height="120"
-          viewBox="0 0 120 120"
-          aria-hidden="true"
-        >
+        <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
           <circle
             cx="60"
             cy="60"
@@ -35,25 +40,23 @@ export default function ProgressCard({ completion, answered, total }: Props) {
             strokeWidth="12"
           />
           <circle
+            className="progressFill"
             cx="60"
             cy="60"
             r="54"
             fill="none"
             stroke="#3498db"
             strokeWidth="12"
-            strokeDasharray={`${(completion / 100) * 339.292} 339.292`}
+            strokeDasharray={`${(animatedCompletion / 100) * circumference} ${circumference}`}
             strokeLinecap="round"
-            transform="rotate(-90 60 60)"
           />
         </svg>
 
-        {/* Visible text */}
         <div className={styles.progressText}>
           <span className={styles.progressPercentage}>{completion}%</span>
           <span className={styles.progressLabel}>Complete</span>
         </div>
 
-        {/* Screen reader summary */}
         <span className={styles.srOnly}>
           {completion}% complete. {answered} of {total} questions answered.
         </span>

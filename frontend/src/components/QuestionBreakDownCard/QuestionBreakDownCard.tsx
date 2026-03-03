@@ -39,18 +39,19 @@ export default function QuestionBreakdownCard({ questions }: Props) {
             <li key={q.question_id} className={styles[status]}>
               <span className={styles.text}>{q.question_title}</span>
 
-              {/* Visual icon */}
-              <span
-                className={styles.status}
-                aria-hidden="true"
-              >
-                {status === 'answered' ? '✅' : status === 'unanswered' ? '❌' : '📝'}
-              </span>
+              {/* Status with tooltip */}
+              <div className={styles.statusWrapper}>
+                <span
+                  className={styles.status}
+                  aria-hidden="true"
+                >
+                  {status === 'answered' ? '✅' : status === 'unanswered' ? '❌' : '📝'}
+                </span>
+                <span className={styles.tooltip}>{statusLabel}</span>
+              </div>
 
               {/* Screen-reader-only text */}
-              <span className={styles.srOnly}>
-                {statusLabel}
-              </span>
+              <span className={styles.srOnly}>{statusLabel}</span>
             </li>
           )
         })}

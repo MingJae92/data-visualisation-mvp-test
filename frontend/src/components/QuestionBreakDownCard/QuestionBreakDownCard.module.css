@@ -1,14 +1,18 @@
 .card {
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 h3 {
   margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  color: #2c3e50;
 }
 
 .questionList {
@@ -20,21 +24,43 @@ h3 {
 .questionList li {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0.5rem 0;
   border-bottom: 1px solid #f0f0f0;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  transition: background 0.2s ease;
 }
 
 .questionList li:last-child {
   border-bottom: none;
 }
 
+.questionList li:hover {
+  background: rgba(52, 152, 219, 0.05); /* subtle highlight on hover */
+  border-radius: 8px;
+}
+
+/* Question title */
 .text {
   font-weight: 500;
   color: #34495e;
+  flex: 1;
+  word-break: break-word;
+  margin-right: 0.5rem;
 }
 
+/* Status icon */
 .status {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.status:hover,
+.status:active {
+  transform: scale(1.2);
+  filter: brightness(1.2);
 }
 
 /* Status colors */
@@ -50,6 +76,7 @@ h3 {
   color: #f39c12;
 }
 
+/* Screen reader only */
 .srOnly {
   position: absolute;
   width: 1px;
@@ -60,4 +87,76 @@ h3 {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Stack on small screens */
+@media (max-width: 480px) {
+  .questionList li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .status {
+    font-size: 1.1rem;
+  }
+}
+
+.statusWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.status {
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.status:hover,
+.status:focus {
+  transform: scale(1.2);
+  filter: brightness(1.2);
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+/* Show tooltip on hover/focus */
+.statusWrapper:hover .tooltip,
+.statusWrapper:focus-within .tooltip {
+  opacity: 1;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .questionList li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .status {
+    font-size: 1.1rem;
+  }
+
+  .tooltip {
+    font-size: 0.8rem;
+    bottom: 120%;
+  }
 }

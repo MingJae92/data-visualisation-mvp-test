@@ -1,14 +1,18 @@
 .card {
   background-color: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  text-align: center; /* center all inline content by default */
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .card h3 {
-  margin-bottom: 1rem; /* spacing from the circle */
+  margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  color: #2c3e50;
 }
 
 .progressCircle {
@@ -16,30 +20,39 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 1rem 0;
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 140px;
+  aspect-ratio: 1 / 1;
+}
+
+.progressCircle svg {
+  transform: rotate(-90deg);
 }
 
 .progressText {
   position: absolute;
   text-align: center;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
 }
 
 .progressPercentage {
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 4vw, 1.4rem);
   font-weight: bold;
   display: block;
   color: #3498db;
 }
 
 .progressLabel {
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 2.5vw, 1rem);
   color: #7f8c8d;
 }
 
 .progressDetails {
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 2.5vw, 1rem);
   color: #34495e;
   text-align: center;
+  margin-top: 0.5rem;
 }
 
 .srOnly {
@@ -52,4 +65,31 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Animated stroke */
+.progressCircle circle.progressFill {
+  transition: stroke-dasharray 1s ease-out;
+}
+
+/* Responsive SVG sizes */
+@media (max-width: 480px) {
+  .progressCircle svg {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .progressCircle svg {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+@media (min-width: 769px) {
+  .progressCircle svg {
+    width: 120px;
+    height: 120px;
+  }
 }
