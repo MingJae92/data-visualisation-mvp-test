@@ -35,14 +35,20 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
+      <header className="app-header" role="banner">
         <h1>Assessment Results System</h1>
         <p>Technical Interview Task!</p>
       </header>
 
-      <main className="app-main">
-        <div className="instance-selector">
-          <label htmlFor="instance-id">Assessment Instance ID:</label>
+      <main className="app-main" role="main">
+        <form
+          className="instance-selector"
+          aria-labelledby="instance-id-label"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <label id="instance-id-label" htmlFor="instance-id">
+            Assessment Instance ID:
+          </label>
 
           <input
             id="instance-id"
@@ -58,12 +64,13 @@ function App() {
             <p
               id="instance-id-error"
               role="alert"
+              aria-live="assertive"
               style={{ color: 'red', marginTop: '0.5rem' }}
             >
               {inputError}
             </p>
           )}
-        </div>
+        </form>
 
         {/* ✅ Only fetch when ID is valid + stable */}
         {!inputError && (
