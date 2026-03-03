@@ -34,12 +34,33 @@ export default function AssessmentResults({ instanceId }: Props) {
     }))
   }, [results])
 
+  // Loading state
   if (loading)
-    return <div style={{ textAlign: 'center', padding: '2rem' }}>Loading results...</div>
+    return (
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        Loading results...
+      </div>
+    )
+
+  // Error state (invalid ID or API failure)
   if (error)
-    return <div style={{ textAlign: 'center', padding: '2rem' }}>Error: {error}</div>
+    return (
+      <div
+        style={{ textAlign: 'center', padding: '2rem', color: 'red' }}
+        role="alert"
+        aria-live="assertive"
+      >
+        {error}
+      </div>
+    )
+
+  // No results found (edge case)
   if (!results)
-    return <div style={{ textAlign: 'center', padding: '2rem' }}>No results to display</div>
+    return (
+      <div style={{ textAlign: 'center', padding: '2rem' }}>
+        No results to display
+      </div>
+    )
 
   return (
     <div>

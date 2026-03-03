@@ -1,3 +1,4 @@
+// src/hooks/useAssessmentResults.ts
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { AssessmentResults } from '../types/assessment'
@@ -13,14 +14,26 @@ export function useAssessmentResults(instanceId: string) {
     const fetchResults = async () => {
       setLoading(true)
       setError(null)
+      setResults(null) // Reset previous results
       try {
         const res = await axios.get(
           `${import.meta.env.VITE_API_URL || 'http://localhost:8002'}/api/assessment/results/${instanceId}`
         )
-        setResults(res.data)
-        console.log(res.data)
+
+        if (!res.data || Object.keys(res.data).length === 0) {
+          setError('Invalid assessment ID') // Empty response → invalid ID
+          setResults(null)
+        } else {
+          setResults(res.data)
+        }
       } catch (err: any) {
-        setError(err.response?.data?.error || 'Failed to load assessment results')
+        // Map network or 404 errors to user-friendly message
+        if (err.response?.status === 404) {
+          setError('Invalid assessment ID')
+        } else {
+          setError(err.response?.data?.error || 'Failed to load assessment results')
+        }
+        setResults(null)
       } finally {
         setLoading(false)
       }
