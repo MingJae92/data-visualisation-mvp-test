@@ -1,15 +1,17 @@
 // src/pages/AssessmentResults.tsx
-import { useMemo } from 'react'
+import { useMemo, lazy, Suspense } from 'react'
 import { useAssessmentResults } from '../hooks/useAssessmentResults'
 
 import ResultsHeader from '../components/ResultsHeader/ResultsHeader'
 import ProgressCard from '../components/ProgressCard/ProgressCard'
 import ScoreCard from '../components/ScoreCard/ScoreCard'
-import RadarChartCard from '../components/RadarChartCard/RadarChartCard'
-import BarChartCard from '../components/BarChartCard/BarChartCard'
 import ElementScoresCard from '../components/ElementScoresCard/ElementScoresCard'
 import QuestionBreakdownCard from '../components/QuestionBreakDownCard/QuestionBreakDownCard'
 import InsightsCard from '../components/InsightsCard/InsightsCard'
+
+// ✅ Lazy load chart components
+const LazyRadarChartCard = lazy(() => import('../components/RadarChartCard/RadarChartCard'))
+const LazyBarChartCard = lazy(() => import('../components/BarChartCard/BarChartCard'))
 
 interface Props {
   instanceId: string
@@ -42,7 +44,7 @@ export default function AssessmentResults({ instanceId }: Props) {
       </div>
     )
 
-  // Error state (invalid ID or API failure)
+  // Error state
   if (error)
     return (
       <div
@@ -54,7 +56,7 @@ export default function AssessmentResults({ instanceId }: Props) {
       </div>
     )
 
-  // No results found (edge case)
+  // No results found
   if (!results)
     return (
       <div style={{ textAlign: 'center', padding: '2rem' }}>
@@ -77,9 +79,14 @@ export default function AssessmentResults({ instanceId }: Props) {
       {/* Score */}
       <ScoreCard scores={results.scores} />
 
-      {/* Charts */}
-      <RadarChartCard data={radarData} />
-      <BarChartCard data={barData} />
+      {/* Charts (Lazy Loaded) */}
+      <Suspense fallback={<div>Loading Radar Chart...</div>}>
+        <LazyRadarChartCard data={radarData} />
+      </Suspense>
+
+      <Suspense fallback={<div>Loading Bar Chart...</div>}>
+        <LazyBarChartCard data={barData} />
+      </Suspense>
 
       {/* Element Scores */}
       <ElementScoresCard elementScores={results.element_scores} />
