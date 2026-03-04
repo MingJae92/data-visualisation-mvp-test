@@ -12,7 +12,6 @@ function App() {
   const [debouncedInstanceId, setDebouncedInstanceId] = useState(instanceId)
   const [inputError, setInputError] = useState<string | null>(null)
 
-  // ✅ Debounce + validate
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!instanceId) {
@@ -25,7 +24,6 @@ function App() {
         return
       }
 
-      // Valid format → allow API call
       setInputError(null)
       setDebouncedInstanceId(instanceId)
     }, 500)
@@ -47,7 +45,7 @@ function App() {
           onSubmit={(e) => e.preventDefault()}
         >
           <label id="instance-id-label" htmlFor="instance-id">
-            Assessment Instance ID:
+            Assessment Instance ID
           </label>
 
           <input
@@ -65,16 +63,17 @@ function App() {
               id="instance-id-error"
               role="alert"
               aria-live="assertive"
-              style={{ color: 'red', marginTop: '0.5rem' }}
+              className="error-text"
             >
               {inputError}
             </p>
           )}
         </form>
 
-        {/* ✅ Only fetch when ID is valid + stable */}
         {!inputError && (
-          <AssessmentResults instanceId={debouncedInstanceId} />
+          <div className="results-wrapper">
+            <AssessmentResults instanceId={debouncedInstanceId} />
+          </div>
         )}
       </main>
     </div>
