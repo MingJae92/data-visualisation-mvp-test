@@ -7,6 +7,7 @@
   text-align: center;
   width: 100%;
   box-sizing: border-box;
+  overflow: visible;
 }
 
 h3 {
@@ -37,6 +38,7 @@ h3 {
   list-style: none;
   padding: 0;
   margin: 0;
+  overflow: visible;
 }
 
 .questionList li {
@@ -49,6 +51,8 @@ h3 {
   transition: background 0.2s ease;
   flex-wrap: wrap;
   gap: 0.25rem;
+  overflow: visible;
+  position: relative;
 }
 
 .questionList li:last-child {
@@ -104,11 +108,14 @@ h3 {
   font-size: clamp(1rem, 4vw, 1.2rem);
   flex-shrink: 0;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .status:hover,
-.status:active {
+.status:active,
+.status:focus {
   transform: scale(1.2);
   filter: brightness(1.2);
 }
@@ -126,33 +133,46 @@ h3 {
   color: #f39c12;
 }
 
+/* Status wrapper */
 .statusWrapper {
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
 }
 
-.status:hover,
-.status:focus {
-  transform: scale(1.2);
-  filter: brightness(1.2);
-}
-
-/* Tooltip */
+/* Tooltip — opens to the LEFT to stay within page bounds */
 .tooltip {
   position: absolute;
-  bottom: 130%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #222;
+  top: 50%;
+  right: 110%;
+  left: auto;
+  transform: translateY(-50%);
+  background: #2c3e50;
   color: #fff;
-  padding: 4px 8px;
-  border-radius: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
   font-size: 0.75rem;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
+  min-width: 180px;
+  max-width: 260px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
-  z-index: 10;
+  z-index: 999;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Arrow pointing RIGHT toward the icon */
+.tooltip::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: #2c3e50;
 }
 
 /* Show tooltip on hover/focus */
@@ -186,9 +206,25 @@ h3 {
     font-size: 1.1rem;
   }
 
+  /* On mobile tooltip opens upward */
   .tooltip {
-    font-size: 0.8rem;
-    bottom: 120%;
+    position: absolute;
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 130%;
+    transform: translateX(-50%);
+    min-width: 160px;
+    max-width: 220px;
+  }
+
+  .tooltip::before {
+    top: 100%;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    border-left-color: transparent;
+    border-top-color: #2c3e50;
   }
 
   .answerDetail,
