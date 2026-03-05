@@ -270,7 +270,7 @@ DATA FLOW
 
 ### Custom Hooks
 
-A key architectural decision was to encapsulate all data fetching logic inside a custom hook — `useAssessmentResults`. Rather than fetching data directly inside a component, the logic lives in its own dedicated file (`src/hooks/useAssessmentResults.ts`). This keeps components clean and focused purely on rendering, while the hook handles all the complexity of API calls, loading states, and error handling.
+A key architectural decision was to encapsulate all data fetching logic inside a custom hook `useAssessmentResults`. Rather than fetching data directly inside a component, the logic lives in its own dedicated file (`src/hooks/useAssessmentResults.ts`). This keeps components clean and focused purely on rendering, while the hook handles all the complexity of API calls, loading states, and error handling.
 
 **Why custom hooks?**
 
@@ -357,9 +357,9 @@ Defensive checks ensure the UI never crashes when data is incomplete.
 
 | Chart | Component | Reason |
 |-------|-----------|--------|
-| Gauge / Radial | `GuageChartCard` | Instantly communicates an overall percentage at a glance — familiar to users, similar to a speedometer dial |
-| Radar / Spider | `RadarChartCard` | Ideal for comparing multiple elements simultaneously — makes strengths and weaknesses immediately visible across axes |
-| Bar | `BarChartCard` | Best for direct side-by-side comparison of element scores — easy to read and interpret for non-technical users |
+| Gauge / Radial | `GuageChartCard` | Instantly communicates an overall percentage displayed familiar to users, similar to a speedometer dial |
+| Radar / Spider | `RadarChartCard` | Ideal for comparing multiple elements simultaneously displays strengths and weaknesses immediately visible across axes |
+| Bar | `BarChartCard` | Best for direct side-by-side comparison of element scores easy to read and interpret for non-technical users |
 
 ---
 
