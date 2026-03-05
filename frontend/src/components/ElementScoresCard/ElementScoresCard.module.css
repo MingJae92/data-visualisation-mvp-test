@@ -4,6 +4,7 @@
   border-radius: 12px;
   width: 100%;
   box-sizing: border-box;
+  overflow: visible;
 }
 
 /* Container for all elements */
@@ -11,6 +12,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow: visible;
 }
 
 /* Each element score card */
@@ -21,6 +23,8 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  overflow: visible;
+  position: relative;
 }
 
 /* Header with score */
@@ -28,7 +32,7 @@
   display: flex;
   justify-content: space-between;
   font-weight: 600;
-  flex-wrap: wrap; /* wrap for small screens */
+  flex-wrap: wrap;
   gap: 4px;
 }
 
@@ -51,7 +55,7 @@
 .elementDetails {
   display: flex;
   justify-content: space-between;
-  font-size: clamp(0.75rem, 2vw, 0.875rem); /* responsive text */
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 8px;
@@ -63,6 +67,7 @@
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 6px;
+  position: relative;
 }
 
 /* Icons + tooltips */
@@ -70,22 +75,43 @@
   position: relative;
   cursor: pointer;
   font-size: 18px;
+  display: inline-flex;
+  align-items: center;
 }
 
+/* Tooltip — opens to the right so it never overlaps siblings */
 .tooltip {
   position: absolute;
-  bottom: 130%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #222;
+  top: 50%;
+  left: 130%;
+  transform: translateY(-50%);
+  background: #2c3e50;
   color: #fff;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  white-space: normal;
+  word-break: break-word;
+  min-width: 180px;
+  max-width: 260px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease-in-out;
+  z-index: 999;
+  line-height: 1.5;
+  /* Arrow pointing left */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Arrow on the left side of tooltip */
+.tooltip::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-right-color: #2c3e50;
 }
 
 .icon:hover .tooltip {
@@ -164,7 +190,7 @@
   margin-top: 0.5rem;
 }
 
-/* MiniQuestionBreakdown icon states — used by MiniQuestionBreakdown */
+/* MiniQuestionBreakdown icon states */
 
 .answered {
   color: #2e7d32;
@@ -192,5 +218,24 @@
 
   .miniQuestionBreakdown {
     justify-content: flex-start;
+  }
+
+  /* On mobile tooltip opens upward to avoid going off screen */
+  .tooltip {
+    top: auto;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 160px;
+    max-width: 220px;
+  }
+
+  .tooltip::before {
+    top: 100%;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    border-right-color: transparent;
+    border-top-color: #2c3e50;
   }
 }
