@@ -274,10 +274,14 @@ A key architectural decision was to encapsulate all data fetching logic inside a
 
 **Why custom hooks?**
 
-- **Encapsulation**  We need to ensure that all fetching logic, state management, and error handling is contained in one place, away from the UI.
-- **Reusability**  Any component in the component tree that needs assessment data can call the same hook without duplicating logic
-- **Separation of concerns** The components only deal with displaying data; the hook deals with fetching it
-- **Testability**  The hook(s) can be tested independently from the UI.
+- **Encapsulation**  
+We need to ensure that all fetching logic, state management, and error handling is contained in one place, away from the UI.
+- **Reusability**  
+Any component in the component tree that needs assessment data can call the same hook without duplicating logic
+- **Separation of concerns** 
+The components only deal with displaying data; the hook deals with fetching it
+- **Testability**  
+The hook(s) can be tested independently from the UI.
 
 ```typescript
 // src/hooks/useAssessmentResults.ts
