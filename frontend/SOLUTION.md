@@ -1,6 +1,6 @@
 # Assessment Results Dashboard (Ming Chi)
 
-# Task (Front end)
+# Task (Front End)
 
 An accessible, responsive dashboard for displaying assessment results — including scores, progress, visual breakdowns, and insights.
 
@@ -152,6 +152,9 @@ DATA-VISUALISATION-MVP
         │       ├── ScoreCard.module.css
         │       ├── ScoreCard.test.tsx
         │       └── ScoreCard.tsx
+        │
+        ├── MockData
+        │   └── mockData.ts                   ← shared mock data for all unit tests
         │
         ├── AssessmentResults.css
         ├── AssessmentResults.tsx
@@ -569,6 +572,22 @@ The mock data reflects the following API instance:
 
 ---
 
+### 6. Tooltip Text Being Cut Off
+
+**Challenge:** Tooltips in `ElementScoresCard` and `QuestionBreakdownCard` were being clipped by parent container boundaries and the right edge of the page, cutting off the full text.
+
+**Solution:** Changed tooltip positioning from `bottom: 130%` to `right: 110%` so tooltips open to the left of the icon, staying fully within the page. Added `overflow: visible` to parent containers and `white-space: normal` so full text wraps correctly inside the tooltip.
+
+---
+
+### 7. InsightsCard Sections Not Appearing Side by Side
+
+**Challenge:** Positive and negative insight sections were stacking vertically instead of sitting side by side on desktop.
+
+**Solution:** Introduced a `sectionsWrapper` flex row container with each section taking `flex: 1 1 calc(50% - 0.5rem)`. On mobile and tablet the wrapper switches to `flex-direction: column` so sections stack vertically on smaller screens.
+
+---
+
 ## Trade-offs & Future Improvements
 
 Given more time, the following improvements would be prioritised:
@@ -579,6 +598,8 @@ Given more time, the following improvements would be prioritised:
 - [ ] Design tokens for consistent theming
 - [ ] Loading skeletons instead of text fallbacks
 - [ ] Collapsible question grouping by element
+- [ ] Extend unit tests to cover all 12 components
+- [ ] Move shared tooltip styles into a global utility class to avoid duplication across `ElementScoresCard` and `QuestionBreakdownCard`
 
 ---
 
