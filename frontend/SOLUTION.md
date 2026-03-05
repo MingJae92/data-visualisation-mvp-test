@@ -1,4 +1,6 @@
-# Assessment Results Dashboard
+# Assessment Results Dashboard (Ming Chi)
+
+# Task (Front end)
 
 An accessible, responsive dashboard for displaying assessment results — including scores, progress, visual breakdowns, and insights.
 
@@ -164,7 +166,7 @@ DATA-VISUALISATION-MVP
             └── scoreUtils.ts                 ← score calculation helpers
 
 
-DASHBOARD WIREFRAME (Rough sketch as it may change due to fully optimised features if given more time)
+DASHBOARD WIREFRAME
 ====================
   Derived from AssessmentResults.tsx — each box maps to a component folder
 
@@ -406,7 +408,7 @@ Questions with no answer are never left blank. They display a clear visual indic
 
 ## Features
 
-###  Charts & Performance
+### 📊 Charts & Performance
 
 - Charts built with **Recharts**
 - Heavy chart components are **lazy-loaded** using `React.lazy` and `Suspense`
@@ -435,15 +437,75 @@ Questions with no answer are never left blank. They display a clear visual indic
 
 Component tests are written with **Vitest** and **React Testing Library**.
 
+Before running tests, navigate to the correct directory first:
+
 ```bash
-npm run test
+# 1. From the root of the project, list the contents to confirm structure
+ls
+
+# 2. Navigate into the frontend directory
+cd frontend
+
+# 3. Run the full test suite
+npx vitest
+
+# Run tests in watch mode
+npx vitest --watch
+
+# Run a single component test
+npx vitest ScoreCard
+npx vitest ResultsHeader
 ```
 
-Coverage includes:
+### Components Tested
 
-- Components render without crashing
-- Score values and labels are displayed correctly
-- Accessibility roles and labels are present
+**ScoreCard**
+
+- Renders the percentage correctly (`53.85%`)
+- Renders total and max score (`9 / 15 points`)
+- Renders element number in heading (`Element 1.1`)
+- Renders the scale note (`Normalised from 1–5 scale`)
+- Renders correct `aria-label` on percentage and performance label
+- Renders correct performance label for each threshold:
+
+| Percentage | Label |
+|------------|-------|
+| 85% | Excellent |
+| 65% | Good |
+| 53.85% | Developing |
+| 30% | Needs Attention |
+
+**ResultsHeader**
+
+- Renders the element number (`Element 1.1`)
+- Renders the responder name (`Test Teacher`)
+- Renders the instance ID
+- Renders `In Progress` badge when `completed` is `false`
+- Renders `Completed` badge when `completed` is `true`
+- Renders the formatted date (`27 February 2026`)
+
+### Shared Mock Data
+
+All tests use shared mock data driven from the real API response, located at:
+
+```
+src/components/MockData/mockData.ts
+```
+
+```ts
+import { mockInstance } from '../../MockData/mockData'
+import { mockScores } from '../../MockData/mockData'
+```
+
+The mock data reflects the following API instance:
+
+| Field | Value |
+|-------|-------|
+| Instance ID | `d1111111-1111-1111-1111-111111111111` |
+| Element | `1.1` |
+| Responder | `Test Teacher` |
+| Score | `53.85%` (9 / 15 points) |
+| Status | `In Progress` |
 
 ### Manual Testing
 
