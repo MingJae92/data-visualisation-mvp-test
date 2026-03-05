@@ -10,6 +10,8 @@ An accessible, responsive dashboard for displaying assessment results — includ
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
+- [Visualizations Chosen and Why](#visualizations-chosen-and-why)
+- [UX Enhancements Implemented](#ux-enhancements-implemented)
 - [Features](#features)
 - [Testing](#testing)
 - [Known Challenges & Solutions](#known-challenges--solutions)
@@ -162,7 +164,7 @@ DATA-VISUALISATION-MVP
             └── scoreUtils.ts                 ← score calculation helpers
 
 
-DASHBOARD WIREFRAME (ROUGH SKETCH, some UI features may haved changed due to fully optimised features that would be required.)
+DASHBOARD WIREFRAME
 ====================
   Derived from AssessmentResults.tsx — each box maps to a component folder
 
@@ -335,9 +337,76 @@ Defensive checks ensure the UI never crashes when data is incomplete.
 
 ---
 
+## Visualizations Chosen and Why
+
+**Recharts** was chosen as the visualisation library for this dashboard as it is built specifically for React — components are declarative and composable, meaning each chart is just a React component with props. This fits naturally into the existing component-driven architecture.
+
+### Performance & Rendering
+
+- Recharts uses **SVG-based rendering**, which is lightweight and resolution-independent
+- Heavy chart components (`RadarChartCard`, `BarChartCard`, `GuageChartCard`) are **lazy-loaded** using `React.lazy` and `Suspense`, meaning they are only downloaded when needed
+- All charts are wrapped in `ResponsiveContainer`, so they re-render fluidly at any screen size without manual resize handlers
+- This avoids unnecessary re-renders and keeps the dashboard performant even when multiple charts are displayed simultaneously
+
+### Charts Used and Why
+
+| Chart | Component | Reason |
+|-------|-----------|--------|
+| Gauge / Radial | `GuageChartCard` | Instantly communicates an overall percentage at a glance — familiar to users, similar to a speedometer dial |
+| Radar / Spider | `RadarChartCard` | Ideal for comparing multiple elements simultaneously — makes strengths and weaknesses immediately visible across axes |
+| Bar | `BarChartCard` | Best for direct side-by-side comparison of element scores — easy to read and interpret for non-technical users |
+
+---
+
+## UX Enhancements Implemented
+
+### 1. Tooltips on Charts
+
+Recharts built-in `<Tooltip />` component is used on all charts. When a user hovers over a bar, radar point, or gauge segment, a tooltip appears showing the exact score for that element — removing the need to estimate values visually.
+
+```
+  ┌─────────────────────┐
+  │  BarChartCard       │
+  │                     │
+  │   ▐▐▐               │
+  │   ▐▐▐  ← hover      │
+  │   ▐▐▐   ┌─────────┐ │
+  │         │Element A│ │
+  │         │Score: 90│ │
+  │         └─────────┘ │
+  └─────────────────────┘
+```
+
+### 2. Hover Effect on Question List Emoji
+
+When a user hovers over the emoji indicator on a question row, a tooltip reveals the full question list for that element. This keeps the UI clean and uncluttered by default, while still giving users quick access to detail without navigating away from the dashboard.
+
+```
+  ┌──────────────────────────────────────────────┐
+  │  ElementScoresCard                           │
+  │                                              │
+  │  Element A  ░░░░░░░░░░  90%  😊  ← hover    │
+  │                          ┌───────────────┐   │
+  │                          │ Q1 ✔ Answered │   │
+  │                          │ Q2 ✔ Answered │   │
+  │                          │ Q3 ✘ Skipped  │   │
+  │                          └───────────────┘   │
+  └──────────────────────────────────────────────┘
+```
+
+### 3. Debounced Input
+
+The assessment ID input is debounced so the API is only called once the user has stopped typing — preventing flickering, unnecessary loading states, and failed requests on partial IDs.
+
+### 4. Graceful Unanswered States
+
+Questions with no answer are never left blank. They display a clear visual indicator and an `N/A` label, so users always understand the state of every question without confusion.
+
+---
+
 ## Features
 
-### 📊 Charts & Performance
+###  Charts & Performance
 
 - Charts built with **Recharts**
 - Heavy chart components are **lazy-loaded** using `React.lazy` and `Suspense`
