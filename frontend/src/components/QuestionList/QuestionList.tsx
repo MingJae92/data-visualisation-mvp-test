@@ -1,10 +1,17 @@
 import styles from './QuestionList.module.css'
 
 interface Question {
-  id: string
-  text: string
-  answer?: string | null
-  score?: number | null
+  question_id: string
+  question_title: string
+  question_sequence: number
+  is_answered: boolean
+  is_reflection: boolean
+  reflection_prompt: string | null
+  element: string
+  max_score: number
+  answer_value: number | null
+  answer_text: string | null
+  text_answer: string | null
 }
 
 interface Props {
@@ -19,40 +26,80 @@ export default function QuestionList({ questions }: Props) {
       aria-labelledby="questions-heading"
       role="region"
     >
-      <h2 id="questions-heading">Question Breakdown</h2>
+      <h2 id="questions-heading" className={styles.heading}>
+        Question Breakdown
+      </h2>
 
       <ul className={styles.list}>
         {questions.map((q) => {
-          const unanswered = !q.answer
+
+          const isUnanswered = !q.is_answered && !q.is_reflection
+          const isReflection = q.is_reflection
 
           return (
             <li
-              key={q.id}
-              className={`${styles.item} ${unanswered ? styles.unanswered : ''}`}
+              key={q.question_id}
+              className={`${styles.item} ${
+                isUnanswered ? styles.unanswered :
+                isReflection ? styles.reflection : styles.answered
+              }`}
+              aria-label={`Q${q.question_sequence}: ${q.question_title}. ${
+                isReflection ? 'Reflection question' :
+                q.is_answered ? `Answered — ${q.answer_text}` : 'Not answered'
+              }`}
             >
-              {/* Question text */}
-              <p className={styles.question}>{q.text}</p>
+              {/* Sequence + title */}
+              <p className={styles.question}>
+                <span className={styles.sequence}>Q{q.question_sequence}</span>
+                {q.question_title}
+              </p>
 
-              {/* Answer or Unanswered state */}
-              {unanswered ? (
-                <p
-                  className={styles.unansweredText}
-                  role="status"
-                  aria-live="polite"
-                >
-                  Unanswered
-                </p>
-              ) : (
+              {/* Reflection question */}
+              {isReflection ? (
                 <div className={styles.answerBlock}>
-                  <p className={styles.answer}>
-                    <strong>Answer:</strong> {q.answer}
+                  <p className={styles.reflectionPrompt}>
+                    <strong>Reflection:</strong> {q.reflection_prompt}
+                  </p>
+                  <p className={isUnanswered ? styles.unansweredText : styles.answer}>
+                    {q.text_answer ?? (
+                      <span
+                        className={styles.unansweredText}
+                        role="status"
+                        aria-live="polite"
+                      >
+                        No reflection submitted yet
+                      </span>
+                    )}
+                  </p>
+                </div>
+
+              ) : isUnanswered ? (
+                /* Unanswered standard question */
+                <div className={styles.answerBlock}>
+                  <p
+                    className={styles.unansweredText}
+                    role="status"
+                    aria-live="polite"
+                  >
+                    ✘ Not answered
                   </p>
                   <p className={styles.score}>
-                    <strong>Score:</strong>{' '}
-                    {q.score != null ? `${q.score}%` : 'N/A'}
+                    Max score: {q.max_score}
+                  </p>
+                </div>
+
+              ) : (
+                /* Answered standard question */
+                <div className={styles.answerBlock}>
+                  <p className={styles.answer}>
+                    <strong>Answer:</strong> {q.answer_text}
+                  </p>
+                  <p className={styles.score}>
+                    <strong>Score:</strong> {q.answer_value} / {q.max_score} points
                   </p>
                 </div>
               )}
+
             </li>
           )
         })}

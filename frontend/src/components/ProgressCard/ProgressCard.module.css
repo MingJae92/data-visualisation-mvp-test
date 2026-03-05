@@ -15,6 +15,12 @@
   color: #2c3e50;
 }
 
+.heading {
+  margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  color: #2c3e50;
+}
+
 .progressCircle {
   position: relative;
   display: flex;
@@ -53,6 +59,26 @@
   color: #34495e;
   text-align: center;
   margin-top: 0.5rem;
+}
+
+/* Answered / total count emphasis */
+.answeredCount {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.totalCount {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Remaining questions warning */
+.remaining {
+  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+  color: #f59e0b;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  text-align: center;
 }
 
 .srOnly {

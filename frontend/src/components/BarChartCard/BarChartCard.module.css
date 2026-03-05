@@ -11,6 +11,13 @@
   font-size: clamp(1.2rem, 4vw, 1.5rem);
 }
 
+/* Heading module class */
+.heading {
+  margin-bottom: 0.75rem;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  color: #2c3e50;
+}
+
 /* Description text */
 .chartDescription {
   font-size: clamp(0.85rem, 2.8vw, 0.95rem);
@@ -25,6 +32,41 @@
   height: 300px;
 }
 
+/* No data fallback */
+.noData {
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  color: #95a5a6;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+/* Custom tooltip — consistent with RadarChartCard */
+.tooltip {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+}
+
+.tooltipElement {
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 0.25rem;
+}
+
+.tooltipScore {
+  color: #34495e;
+  margin: 0 0 0.15rem;
+}
+
+.tooltipPercentage {
+  font-weight: 700;
+  margin: 0;
+  /* colour applied inline via getScoreColor */
+}
+
 /* Tablet / small screens */
 @media (max-width: 600px) {
   .card {
@@ -34,12 +76,24 @@
   .chartWrapper {
     height: 240px;
   }
+
+  .chartDescription {
+    font-size: 0.875rem;
+  }
+
+  .tooltip {
+    padding: 0.4rem 0.6rem;
+  }
 }
 
 /* Small phones */
 @media (max-width: 400px) {
   .chartWrapper {
     height: 220px;
+  }
+
+  .chartDescription {
+    font-size: 0.825rem;
   }
 }
 

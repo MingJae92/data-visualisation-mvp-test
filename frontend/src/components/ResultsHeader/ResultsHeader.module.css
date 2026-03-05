@@ -6,24 +6,58 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.5rem; /* spacing between title and instance ID */
+  gap: 0.5rem;
 }
 
 /* Title adjusts based on viewport width */
 .title {
-  font-size: clamp(1.5rem, 4vw, 2rem); /* scales between 1.5rem and 2rem */
+  font-size: clamp(1.5rem, 4vw, 2rem);
   margin-bottom: 0;
   color: #2c3e50;
   line-height: 1.2;
-  word-break: break-word; /* prevent overflow on small devices */
+  word-break: break-word;
+}
+
+/* Responder name styling */
+.responderName {
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 /* Instance ID styling */
 .instanceId {
-  font-size: clamp(0.8rem, 2.5vw, 1rem); /* scales with screen */
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
   color: #7f8c8d;
   word-break: break-all;
-  overflow-wrap: anywhere; /* handle very long strings */
+  overflow-wrap: anywhere;
+}
+
+/* Date styling */
+.date {
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  color: #7f8c8d;
+}
+
+/* Status badges */
+.badgeComplete {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  font-weight: 600;
+  background-color: #e6f4ea;
+  color: #2e7d32;
+}
+
+.badgeInProgress {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  font-weight: 600;
+  background-color: #fff8e1;
+  color: #f59e0b;
 }
 
 /* Larger screens: horizontal layout */
@@ -32,6 +66,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
   }
 
   .title {
@@ -39,6 +74,10 @@
   }
 
   .instanceId {
+    text-align: right;
+  }
+
+  .date {
     text-align: right;
   }
 }
@@ -55,5 +94,15 @@
 
   .instanceId {
     font-size: clamp(0.7rem, 4vw, 0.9rem);
+  }
+
+  .date {
+    font-size: clamp(0.7rem, 4vw, 0.9rem);
+  }
+
+  .badgeComplete,
+  .badgeInProgress {
+    font-size: clamp(0.7rem, 3.5vw, 0.8rem);
+    padding: 0.2rem 0.5rem;
   }
 }

@@ -12,10 +12,16 @@ h3 {
   font-size: 1.2rem;
 }
 
+.heading {
+  margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  color: #2c3e50;
+}
+
 .chartWrapper {
   position: relative;
   width: 100%;
-  height: 300px; /* desktop */
+  height: 300px;
   margin: 0 auto;
 }
 
@@ -24,9 +30,33 @@ h3 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -30%);
-  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Percentage value — colour applied inline via getScoreColor */
+.gaugePercentage {
+  font-size: clamp(1.3rem, 4vw, 1.5rem);
   font-weight: bold;
-  color: #3498db;
+  line-height: 1;
+}
+
+/* Performance label below percentage */
+.gaugePerformance {
+  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+/* No data fallback */
+.noData {
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  color: #95a5a6;
+  text-align: center;
+  padding: 1rem 0;
 }
 
 .srOnly {
@@ -44,15 +74,18 @@ h3 {
 /* Responsive */
 @media (max-width: 800px) {
   .chartWrapper { height: 260px; }
-  .gaugeLabel { font-size: 1.3rem; }
+  .gaugePercentage { font-size: clamp(1.1rem, 3.5vw, 1.3rem); }
+  .gaugePerformance { font-size: clamp(0.7rem, 2vw, 0.85rem); }
 }
 
 @media (max-width: 600px) {
   .chartWrapper { height: 220px; }
-  .gaugeLabel { font-size: 1.1rem; }
+  .gaugePercentage { font-size: clamp(1rem, 3vw, 1.2rem); }
+  .gaugePerformance { font-size: clamp(0.65rem, 2vw, 0.8rem); }
 }
 
 @media (max-width: 400px) {
   .chartWrapper { height: 200px; }
-  .gaugeLabel { font-size: 1rem; }
+  .gaugePercentage { font-size: clamp(0.9rem, 2.5vw, 1rem); }
+  .gaugePerformance { font-size: clamp(0.6rem, 1.8vw, 0.75rem); }
 }

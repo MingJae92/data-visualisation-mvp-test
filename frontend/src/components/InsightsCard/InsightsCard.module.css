@@ -6,7 +6,24 @@
   margin-bottom: 1.5rem;
   width: 100%;
   box-sizing: border-box;
-  transition: box-shadow 0.3s ease; /* smooth transition for hover effect */
+  transition: box-shadow 0.3s ease;
+}
+
+/* Card heading */
+.heading {
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+/* Section headings — Strengths / Areas for Attention */
+.sectionHeading {
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  color: #7f8c8d;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 0.25rem;
 }
 
 /* Container for all insights */
@@ -25,7 +42,7 @@
   flex-direction: column;
   gap: 0.3rem;
   flex: 1 1 100%;
-  transition: transform 0.2s ease, box-shadow 0.2s ease; /* smooth hover */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Hover effect for desktop */
@@ -45,6 +62,20 @@
 .negative {
   background: #fdecea;
   color: #e74c3c;
+}
+
+/* Insight header — emoji + type label in a row */
+.insightHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Emoji indicator */
+.insightEmoji {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 /* Type of insight (bold label) */
@@ -97,6 +128,14 @@ h3 {
     font-size: 0.8rem;
   }
 
+  .insightEmoji {
+    font-size: 1rem;
+  }
+
+  .sectionHeading {
+    font-size: clamp(0.85rem, 3vw, 0.95rem);
+  }
+
   h3 {
     font-size: 1.25rem;
   }
@@ -118,6 +157,14 @@ h3 {
     font-size: 0.85rem;
   }
 
+  .insightEmoji {
+    font-size: 1.1rem;
+  }
+
+  .sectionHeading {
+    font-size: clamp(0.875rem, 2.5vw, 0.95rem);
+  }
+
   h3 {
     font-size: 1.35rem;
   }
@@ -131,6 +178,6 @@ h3 {
   }
 
   .insight {
-    flex: 1 1 calc(50% - 1rem); /* two insights per row */
+    flex: 1 1 calc(50% - 1rem);
   }
 }

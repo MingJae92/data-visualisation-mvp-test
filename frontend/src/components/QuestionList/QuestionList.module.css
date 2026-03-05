@@ -18,20 +18,46 @@
   outline-offset: 2px;
 }
 
+/* State border indicators */
+.answered {
+  border-left: 4px solid #27ae60;
+  background: #f6fff8;
+}
+
 .unanswered {
   border-left: 4px solid #d32f2f;
   background: #fff5f5;
 }
 
-.unansweredText {
-  color: #d32f2f;
-  font-weight: 600;
+.reflection {
+  border-left: 4px solid #f39c12;
+  background: #fffdf5;
+}
+
+/* Heading */
+.heading {
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+/* Question sequence — Q1, Q2 etc */
+.sequence {
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  font-weight: 700;
+  color: #95a5a6;
+  margin-right: 0.4rem;
+  flex-shrink: 0;
 }
 
 .question {
   font-weight: 500;
   margin-bottom: 0.5rem;
   color: #34495e;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  flex-wrap: wrap;
 }
 
 .answerBlock p {
@@ -47,16 +73,37 @@
   color: #27ae60;
 }
 
+/* Unanswered state */
+.unansweredText {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+/* Reflection prompt */
+.reflectionPrompt {
+  color: #f39c12;
+  font-style: italic;
+  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+  margin-bottom: 0.25rem;
+}
+
 /* Responsive adjustments */
 @media (max-width: 800px) {
   .item {
     padding: 0.85rem;
   }
+
   .question {
     font-size: 0.95rem;
   }
-  .answer, .score {
+
+  .answer,
+  .score {
     font-size: 0.9rem;
+  }
+
+  .reflectionPrompt {
+    font-size: 0.85rem;
   }
 }
 
@@ -64,11 +111,18 @@
   .item {
     padding: 0.75rem;
   }
+
   .question {
     font-size: 0.9rem;
   }
-  .answer, .score {
+
+  .answer,
+  .score {
     font-size: 0.85rem;
+  }
+
+  .reflectionPrompt {
+    font-size: 0.8rem;
   }
 }
 
@@ -76,10 +130,21 @@
   .item {
     padding: 0.65rem;
   }
+
   .question {
     font-size: 0.85rem;
   }
-  .answer, .score {
+
+  .answer,
+  .score {
     font-size: 0.8rem;
+  }
+
+  .reflectionPrompt {
+    font-size: 0.75rem;
+  }
+
+  .sequence {
+    font-size: clamp(0.7rem, 2vw, 0.8rem);
   }
 }

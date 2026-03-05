@@ -9,25 +9,46 @@
 
 .card h3 {
   margin-bottom: 1rem;
-  font-size: clamp(1.2rem, 4vw, 1.6rem); /* scales for all screens */
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+}
+
+.heading {
+  margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  color: #2c3e50;
 }
 
 .scoreDisplay {
   display: flex;
-  flex-direction: column; /* always stacked */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 }
 
 .scorePercentage {
-  font-size: clamp(1.5rem, 6vw, 2.5rem); /* scales with screen */
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
   font-weight: bold;
 }
 
 .scoreDetails p {
   margin: 0.2rem 0;
-  font-size: clamp(0.85rem, 2.5vw, 1rem); /* responsive text */
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+}
+
+/* Raw score points line */
+.scoreRaw {
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  color: #34495e;
+  margin: 0.2rem 0;
+}
+
+/* Performance label — colour applied inline via getScoreColor */
+.performanceLabel {
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin: 0.25rem 0;
 }
 
 .scoreNote {
@@ -47,6 +68,14 @@
   }
 
   .scoreDetails p {
+    font-size: clamp(0.75rem, 2.2vw, 0.9rem);
+  }
+
+  .performanceLabel {
+    font-size: clamp(0.8rem, 2.2vw, 1rem);
+  }
+
+  .scoreRaw {
     font-size: clamp(0.75rem, 2.2vw, 0.9rem);
   }
 }
