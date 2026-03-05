@@ -81,6 +81,186 @@ The UI is composed of small, focused components:
 | `QuestionBreakdownCard` | Question breakdown summary                       |
 | `InsightsCard`          | Positive/negative insights with clear indicators |
 
+### Wireframe & Architecture
+
+```
+FILE STRUCTURE
+==============
+
+DATA-VISUALISATION-MVP
+└── frontend
+    └── src
+        ├── components
+        │   ├── BarChartCard
+        │   │   ├── BarChartCard.module.css
+        │   │   ├── BarChartCard.test.tsx
+        │   │   └── BarChartCard.tsx
+        │   │
+        │   ├── DrilldownModal
+        │   │   ├── DrilldownModal.test.tsx
+        │   │   └── DrilldownModal.tsx
+        │   │
+        │   ├── ElementScoresCard
+        │   │   ├── ElementScoredCard.test.tsx
+        │   │   ├── ElementScoresCard.module.css
+        │   │   └── ElementScoresCard.tsx
+        │   │
+        │   ├── GuageChartCard
+        │   │   ├── GuageChartCard.module.css
+        │   │   ├── GuageChartCard.test.tsx
+        │   │   └── GuageChartCard.tsx
+        │   │
+        │   ├── InsightsCard
+        │   │   ├── InsightCard.test.tsx
+        │   │   ├── InsightsCard.module.css
+        │   │   └── InsightsCard.tsx
+        │   │
+        │   ├── MiniquestionBreakdown
+        │   │   ├── MiniquestionBreakdown.test.tsx
+        │   │   └── MiniquestionBreakdown.tsx
+        │   │
+        │   ├── ProgressCard
+        │   │   ├── ProgressCard.module.css
+        │   │   ├── ProgressCard.test.tsx
+        │   │   └── ProgressCard.tsx
+        │   │
+        │   ├── QuestionBreakDownCard
+        │   │   ├── QuestionBreakDownCard.module.css
+        │   │   ├── QuestionBreakdownCard.test.tsx
+        │   │   └── QuestionBreakDownCard.tsx
+        │   │
+        │   ├── QuestionList
+        │   │   ├── QuestionList.module.css
+        │   │   ├── QuestionList.test.tsx
+        │   │   └── QuestionList.tsx
+        │   │
+        │   ├── RadarChartCard
+        │   │   ├── RadarChartCard.module.css
+        │   │   ├── RadarChartCard.test.tsx
+        │   │   └── RadarChartCard.tsx
+        │   │
+        │   ├── ResultsHeader
+        │   │   ├── ResultsHeader.module.css
+        │   │   ├── ResultsHeader.test.tsx
+        │   │   └── ResultsHeader.tsx
+        │   │
+        │   └── ScoreCard
+        │       ├── ScoreCard.module.css
+        │       ├── ScoreCard.test.tsx
+        │       └── ScoreCard.tsx
+        │
+        ├── AssessmentResults.css
+        ├── AssessmentResults.tsx
+        │
+        ├── hooks
+        │   └── useAssessmentResults.ts       ← data fetching & state
+        │
+        ├── types
+        │   └── assessment.ts                 ← shared TypeScript types
+        │
+        └── utils
+            └── scoreUtils.ts                 ← score calculation helpers
+
+
+DASHBOARD WIREFRAME
+====================
+  Derived from AssessmentResults.tsx — each box maps to a component folder
+
+┌─────────────────────────────────────────────────────────────┐
+│                     AssessmentResults.tsx                   │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                    ResultsHeader                      │  │
+│  │      [ Instance ID ]  [ Date ]  [ Status Badge ]     │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                                                             │
+│  ┌──────────────────────┐   ┌──────────────────────────┐   │
+│  │     ProgressCard     │   │        ScoreCard          │   │
+│  │   Completion: 75%    │   │     Overall: 84 / 100     │   │
+│  │   [=======75%======] │   │                           │   │
+│  └──────────────────────┘   └──────────────────────────┘   │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                   GuageChartCard                      │  │
+│  │                       ◑  84%                          │  │
+│  │                Overall Score Gauge                    │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                                                             │
+│  ┌──────────────────────┐   ┌──────────────────────────┐   │
+│  │    RadarChartCard    │   │      BarChartCard         │   │
+│  │   Score by Element ◆ │   │  Score per Element       │   │
+│  │                      │   │  ▐▐▐ ▐▐ ▐▐▐▐ ▐▐          │   │
+│  └──────────────────────┘   └──────────────────────────┘   │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                  ElementScoresCard                    │  │
+│  │   Element A  ░░░░░░░░░░░░░░░░  90%                   │  │
+│  │   Element B  ░░░░░░░░░░        70%                   │  │
+│  │   Element C  ░░░░░░░░░░░░░     85%                   │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │               QuestionBreakDownCard                   │  │
+│  │   ┌───────────────────────────────────────────────┐  │  │
+│  │   │                 QuestionList                  │  │  │
+│  │   │   ✔  Q1 — Answered                            │  │  │
+│  │   │   ✔  Q2 — Answered                            │  │  │
+│  │   │   ✘  Q3 — Unanswered  [ N/A ]                 │  │  │
+│  │   │   ┌─────────────────────────────────────┐     │  │  │
+│  │   │   │      MiniquestionBreakdown          │     │  │  │
+│  │   │   │   Sub-question detail per answer    │     │  │  │
+│  │   │   └─────────────────────────────────────┘     │  │  │
+│  │   └───────────────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                    InsightsCard                       │  │
+│  │   ✅  Strong performance in Element A                 │  │
+│  │   ✅  High completion rate                            │  │
+│  │   ⚠️   Element B below threshold                      │  │
+│  └───────────────────────────────────────────────────────┘  │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                   DrilldownModal                      │  │
+│  │   [ Triggered on element click — overlay modal ]     │  │
+│  │   Detailed breakdown per selected element            │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+
+
+COMPONENT HIERARCHY
+====================
+
+AssessmentResults.tsx
+├── ResultsHeader                  (ResultsHeader/ResultsHeader.tsx)
+├── ProgressCard                   (ProgressCard/ProgressCard.tsx)
+├── ScoreCard                      (ScoreCard/ScoreCard.tsx)
+├── GuageChartCard                 (GuageChartCard/GuageChartCard.tsx)
+├── RadarChartCard                 (RadarChartCard/RadarChartCard.tsx)
+├── BarChartCard                   (BarChartCard/BarChartCard.tsx)
+├── ElementScoresCard              (ElementScoresCard/ElementScoresCard.tsx)
+├── QuestionBreakDownCard          (QuestionBreakDownCard/QuestionBreakDownCard.tsx)
+│   └── QuestionList               (QuestionList/QuestionList.tsx)
+│       └── MiniquestionBreakdown  (MiniquestionBreakdown/MiniquestionBreakdown.tsx)
+├── InsightsCard                   (InsightsCard/InsightsCard.tsx)
+└── DrilldownModal                 (DrilldownModal/DrilldownModal.tsx)
+
+
+DATA FLOW
+==========
+
+  useAssessmentResults.ts  (hooks/)
+      │
+      ├── results ──▶ useMemo transforms ──▶ chart data       (RadarChartCard, BarChartCard, GuageChartCard)
+      │                                  ──▶ element scores   (ElementScoresCard) via scoreUtils.ts
+      │                                  ──▶ question states  (QuestionList, MiniquestionBreakdown)
+      │                                  ──▶ insights         (InsightsCard)
+      ├── loading ──▶ loading indicators across all cards
+      └── error   ──▶ error messages / fallback UI
+```
+
+---
+
 ### Custom Hooks
 
 A key architectural decision was to encapsulate all data fetching logic inside a custom hook — `useAssessmentResults`. Rather than fetching data directly inside a component, the logic lives in its own dedicated file (`src/hooks/useAssessmentResults.ts`). This keeps components clean and focused purely on rendering, while the hook handles all the complexity of API calls, loading states, and error handling.
