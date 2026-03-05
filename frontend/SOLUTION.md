@@ -28,11 +28,11 @@ The goal of this project was to build an accessible, responsive assessment resul
 
 Core design principles:
 
-- **Clear data flow** — API → transformation → presentation
-- **Component-driven design** — each concern (scores, charts, questions, insights) is isolated
-- **Performance optimisations** — lazy-loaded charts, debounced input
-- **Accessibility-first UI** — screen-reader support and semantic markup throughout
-- **Graceful degradation** — safe handling of missing or partial data
+- **Clear data flow**  API (Data was flowing from parent to child) → transformation → presentation
+- **Component-driven design**  Each concern (scores, charts, questions, insights) is isolated (Modularity and reusability)
+- **Performance optimisations**  Lazy-loaded charts, debounced input (Data render optimisation)
+- **Accessibility-first UI**  screen-reader support and semantic markup throughout (Excellent user experience)
+- **Graceful degradation**  safe handling of missing or partial data (Error handling for better user experience)
 
 ---
 
