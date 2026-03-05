@@ -274,10 +274,10 @@ A key architectural decision was to encapsulate all data fetching logic inside a
 
 **Why custom hooks?**
 
-- **Encapsulation** — all fetching logic, state management, and error handling is contained in one place, away from the UI
-- **Reusability** — any component that needs assessment data can call the same hook without duplicating logic
-- **Separation of concerns** — components only deal with displaying data; the hook deals with fetching it
-- **Testability** — the hook can be tested independently from the UI
+- **Encapsulation**  We need to ensure that all fetching logic, state management, and error handling is contained in one place, away from the UI.
+- **Reusability**  Any component in the component tree that needs assessment data can call the same hook without duplicating logic
+- **Separation of concerns** The components only deal with displaying data; the hook deals with fetching it
+- **Testability**  The hook(s) can be tested independently from the UI.
 
 ```typescript
 // src/hooks/useAssessmentResults.ts
@@ -328,7 +328,7 @@ export function useAssessmentResults(instanceId: string) {
 }
 ```
 
-The hook returns three values — `results`, `loading`, and `error` — which any consuming component can destructure and use directly. This pattern means the UI always reflects the current state without needing to manage that complexity itself.
+The hook returns three values  `results`, `loading`, and `error` which any consuming component can destructure and use directly. This pattern means the UI always reflects the current state without needing to manage that complexity itself.
 
 ### Data Fetching & Transformation
 
@@ -344,7 +344,7 @@ Defensive checks ensure the UI never crashes when data is incomplete.
 
 ## Visualizations Chosen and Why
 
-**Recharts** was chosen as the visualisation library for this dashboard as it is built specifically for React — components are declarative and composable, meaning each chart is just a React component with props. This fits naturally into the existing component-driven architecture.
+**Recharts** was chosen as the visualisation library for this dashboard as it is built specifically for React components are declarative and composable, meaning each chart is just a React component with props. This fits naturally into the existing component-driven architecture which creates a great user experience and friendly for non technical users.
 
 ### Performance & Rendering
 
@@ -367,7 +367,7 @@ Defensive checks ensure the UI never crashes when data is incomplete.
 
 ### 1. Tooltips on Charts
 
-Recharts built-in `<Tooltip />` component is used on all charts. When a user hovers over a bar, radar point, or gauge segment, a tooltip appears showing the exact score for that element — removing the need to estimate values visually.
+Recharts built-in `<Tooltip />` component is used on all charts. When a user hovers over a bar, radar point, or gauge segment, a tooltip appears showing the exact score for that element removing the need to estimate values visually.
 
 ```
   ┌─────────────────────┐
@@ -401,7 +401,7 @@ When a user hovers over the emoji indicator on a question row, a tooltip reveals
 
 ### 3. Debounced Input
 
-The assessment ID input is debounced so the API is only called once the user has stopped typing — preventing flickering, unnecessary loading states, and failed requests on partial IDs.
+The assessment ID input is debounced so the API is only called once the user has stopped typing preventing flickering, unnecessary loading states, and failed requests on partial IDs.
 
 ### 4. Graceful Unanswered States
 
@@ -411,13 +411,13 @@ Questions with no answer are never left blank. They display a clear visual indic
 
 ## Features
 
-### 📊 Charts & Performance
+###  Charts & Performance
 
 - Charts built with **Recharts**
 - Heavy chart components are **lazy-loaded** using `React.lazy` and `Suspense`
 - All charts use `ResponsiveContainer` with adaptive heights for all screen sizes
 
-### ♿ Accessibility
+###  Accessibility
 
 - Semantic landmarks: `<main>`, `<section>`, `role="region"`
 - `aria-labelledby` and `aria-describedby` on charts
@@ -425,7 +425,7 @@ Questions with no answer are never left blank. They display a clear visual indic
 - Clear answered/unanswered indicators for questions
 - Gauge chart includes a textual percentage for non-visual users
 
-### 📱 Responsive Design
+###  Responsive Design
 
 - Fluid-width cards constrained by a central container
 - Charts scale dynamically
