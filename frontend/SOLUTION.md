@@ -164,7 +164,7 @@ DATA-VISUALISATION-MVP
             └── scoreUtils.ts                 ← score calculation helpers
 
 
-DASHBOARD WIREFRAME
+DASHBOARD WIREFRAME (Rough sketch as it may change due to fully optimised features if given more time)
 ====================
   Derived from AssessmentResults.tsx — each box maps to a component folder
 
