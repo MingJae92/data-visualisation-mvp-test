@@ -1,100 +1,3 @@
-## Implementation Details
-
-### 1. Data Fetching & Transformation
-
-- Data is fetched via a custom `useAssessmentResults` hook.
-- API responses are transformed using `useMemo` to:
-  - Derive element-level scores
-  - Build chart-friendly datasets
-  - Safely handle missing or undefined fields (e.g. unanswered questions, null scores)
-
-Defensive checks ensure the UI never crashes when data is incomplete.
-
----
-
-### 2. UI Structure
-
-The page is composed of small, focused components:
-
-- **ResultsHeader** – Instance metadata
-- **ProgressCard** – Completion progress
-- **ScoreCard** – Overall numeric score
-- **GaugeChartCard** – Lightweight overall percentage gauge
-- **RadarChartCard / BarChartCard** – Visual score breakdowns
-- **ElementScoresCard** – Element-by-element scoring
-- **QuestionList / QuestionBreakdownCard** – Per-question answers and unanswered states
-- **InsightsCard** – Positive/negative insights with clear indicators
-
----
-
-### 3. Charts & Performance
-
-- Charts are built with **Recharts**
-- Heavy chart components are lazy-loaded using `React.lazy` and `Suspense`
-- Charts are wrapped in `ResponsiveContainer` with adaptive heights to fit all screen sizes
-
----
-
-### 4. Accessibility
-
-Accessibility was a core requirement:
-
-- Semantic landmarks (`main`, `section`, `role="region"`)
-- `aria-labelledby` and `aria-describedby` for charts
-- Screen-reader-only descriptions for visual elements
-- Clear answered / unanswered indicators for questions
-- Gauge chart includes a textual percentage for non-visual users
-
----
-
-### 5. Responsive Design
-
-- All cards are fluid-width and constrained by a central container
-- Charts scale dynamically
-- Lists and insight cards stack cleanly on smaller screens
-- Touch-friendly spacing on mobile
-
----
-
-## Tools & Libraries Used
-
-### Core
-- React + TypeScript
-- Vite (build & dev server)
-
-### Visualisation
-- Recharts (Bar, Radar, Radial/Gauge charts)
-
-### Styling
-- CSS Modules
-
-### Testing
-- Vitest
-- React Testing Library
-- jsdom
-
----
-
-## AI Tools Used
-
-- **ChatGPT**
-  - Sanity-checking accessibility patterns
-  - Assisting with test setup (Vitest + RTL)
-  - Validating responsive layouts and ARIA decisions
-
----
-
-## Testing
-
-### Unit Tests
-
-Component tests are written using **Vitest + React Testing Library**.
-
-Run tests with:
-
-```bash
-npm run test
-
 # Assessment Results Dashboard
 
 An accessible, responsive dashboard for displaying assessment results — including scores, progress, visual breakdowns, and insights.
@@ -111,6 +14,7 @@ An accessible, responsive dashboard for displaying assessment results — includ
 - [Testing](#testing)
 - [Known Challenges & Solutions](#known-challenges--solutions)
 - [Trade-offs & Future Improvements](#trade-offs--future-improvements)
+- [AI Tools Used](#ai-tools-used)
 
 ---
 
@@ -130,12 +34,12 @@ Core design principles:
 
 ## Tech Stack
 
-| Category       | Library / Tool                        |
-|----------------|---------------------------------------|
-| Framework      | React + TypeScript                    |
-| Build Tool     | Vite                                  |
-| Visualisation  | Recharts (Bar, Radar, Radial/Gauge)   |
-| Styling        | CSS Modules                           |
+| Category       | Library / Tool                         |
+|----------------|----------------------------------------|
+| Framework      | React + TypeScript                     |
+| Build Tool     | Vite                                   |
+| Visualisation  | Recharts (Bar, Radar, Radial/Gauge)    |
+| Styling        | CSS Modules                            |
 | Testing        | Vitest + React Testing Library + jsdom |
 
 ---
@@ -164,22 +68,84 @@ npm run build
 
 The UI is composed of small, focused components:
 
-| Component               | Responsibility                                      |
-|-------------------------|-----------------------------------------------------|
-| `ResultsHeader`         | Instance metadata                                   |
-| `ProgressCard`          | Completion progress                                 |
-| `ScoreCard`             | Overall numeric score                               |
-| `GaugeChartCard`        | Lightweight overall percentage gauge                |
-| `RadarChartCard`        | Visual score breakdown (radar)                      |
-| `BarChartCard`          | Visual score breakdown (bar)                        |
-| `ElementScoresCard`     | Element-by-element scoring                          |
-| `QuestionList`          | Per-question answers and unanswered states          |
-| `QuestionBreakdownCard` | Question breakdown summary                          |
-| `InsightsCard`          | Positive/negative insights with clear indicators    |
+| Component               | Responsibility                                   |
+|-------------------------|--------------------------------------------------|
+| `ResultsHeader`         | Instance metadata                                |
+| `ProgressCard`          | Completion progress                              |
+| `ScoreCard`             | Overall numeric score                            |
+| `GaugeChartCard`        | Lightweight overall percentage gauge             |
+| `RadarChartCard`        | Visual score breakdown (radar)                   |
+| `BarChartCard`          | Visual score breakdown (bar)                     |
+| `ElementScoresCard`     | Element-by-element scoring                       |
+| `QuestionList`          | Per-question answers and unanswered states       |
+| `QuestionBreakdownCard` | Question breakdown summary                       |
+| `InsightsCard`          | Positive/negative insights with clear indicators |
+
+### Custom Hooks
+
+A key architectural decision was to encapsulate all data fetching logic inside a custom hook — `useAssessmentResults`. Rather than fetching data directly inside a component, the logic lives in its own dedicated file (`src/hooks/useAssessmentResults.ts`). This keeps components clean and focused purely on rendering, while the hook handles all the complexity of API calls, loading states, and error handling.
+
+**Why custom hooks?**
+
+- **Encapsulation** — all fetching logic, state management, and error handling is contained in one place, away from the UI
+- **Reusability** — any component that needs assessment data can call the same hook without duplicating logic
+- **Separation of concerns** — components only deal with displaying data; the hook deals with fetching it
+- **Testability** — the hook can be tested independently from the UI
+
+```typescript
+// src/hooks/useAssessmentResults.ts
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { AssessmentResults } from '../types/assessment'
+
+export function useAssessmentResults(instanceId: string) {
+  const [results, setResults] = useState<AssessmentResults | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!instanceId) return
+
+    const fetchResults = async () => {
+      setLoading(true)
+      setError(null)
+      setResults(null) // Reset previous results
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL || 'http://localhost:8002'}/api/assessment/results/${instanceId}`
+        )
+
+        if (!res.data || Object.keys(res.data).length === 0) {
+          setError('Invalid assessment ID') // Empty response → invalid ID
+          setResults(null)
+        } else {
+          setResults(res.data)
+        }
+      } catch (err: any) {
+        // Map network or 404 errors to user-friendly message
+        if (err.response?.status === 404) {
+          setError('Invalid assessment ID')
+        } else {
+          setError(err.response?.data?.error || 'Failed to load assessment results')
+        }
+        setResults(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchResults()
+  }, [instanceId])
+
+  return { results, loading, error }
+}
+```
+
+The hook returns three values — `results`, `loading`, and `error` — which any consuming component can destructure and use directly. This pattern means the UI always reflects the current state without needing to manage that complexity itself.
 
 ### Data Fetching & Transformation
 
-Data is fetched via a custom `useAssessmentResults` hook. API responses are transformed using `useMemo` to:
+API responses are transformed using `useMemo` to:
 
 - Derive element-level scores
 - Build chart-friendly datasets
@@ -240,7 +206,7 @@ Coverage includes:
 
 ## Known Challenges & Solutions
 
-### 1. Docker environment variables are not compiling with Vite
+### 1. Docker Environment Variables Not Compiling with Vite
 
 **Challenge:** Environment variables from `.env` were `undefined` when running inside Docker, even though the file existed.
 
@@ -248,7 +214,7 @@ Coverage includes:
 
 ---
 
-### 2. Invalid ID error not displaying in the correct place
+### 2. Invalid ID Error Not Displaying in the Correct Place
 
 **Challenge:** Validation for an invalid assessment ID was handled inside the data-fetching hook, so the error surfaced too late — after the API call — rather than inline with the input field.
 
@@ -256,7 +222,7 @@ Coverage includes:
 
 ---
 
-### 3. Excessive API calls on every keystroke
+### 3. Excessive API Calls on Every Keystroke
 
 **Challenge:** Every keystroke in the assessment ID input triggered a re-render and a network request.
 
@@ -268,7 +234,7 @@ Coverage includes:
 
 ---
 
-### 4. Handling missing API data
+### 4. Handling Missing API Data
 
 **Challenge:** Some questions had no answers or scores.
 
@@ -280,7 +246,7 @@ Coverage includes:
 
 ---
 
-### 5. Test configuration in a monorepo
+### 5. Test Configuration in a Monorepo
 
 **Challenge:** Frontend and backend live in the same repository.
 
@@ -312,9 +278,3 @@ Given more time, the following improvements would be prioritised:
 - Sanity-check accessibility patterns
 - Assist with Vitest + React Testing Library test setup
 - Validate responsive and ARIA decisions
-
-
-
-
-
-
