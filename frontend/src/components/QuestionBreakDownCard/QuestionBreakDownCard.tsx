@@ -1,4 +1,3 @@
-// src/components/QuestionBreakdownCard/QuestionBreakdownCard.tsx
 import styles from './QuestionBreakDownCard.module.css'
 
 interface Question {

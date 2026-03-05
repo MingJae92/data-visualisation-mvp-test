@@ -1,4 +1,3 @@
-// RadarChartCard.tsx
 import styles from './RadarChartCard.module.css'
 import {
   RadarChart,
