@@ -1,12 +1,14 @@
 export interface AssessmentInstance {
   id: string
+  element: string
+  responder_name: string
+  created_at: string
   completed: boolean
   completed_at: string | null
-  element: string
-  responder_name?: string
 }
 
 export interface Score {
+  element: string
   total_score: number
   max_score: number
   percentage: number
@@ -18,10 +20,12 @@ export interface QuestionAnswer {
   question_sequence: number
   is_reflection: boolean
   reflection_prompt: string | null
+  element: string
   max_score: number
   is_answered: boolean
   answer_value: number | null
   answer_text: string | null
+  text_answer: string | null
 }
 
 export interface ElementScore {

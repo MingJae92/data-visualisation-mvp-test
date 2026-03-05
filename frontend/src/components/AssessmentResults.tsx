@@ -9,9 +9,10 @@ import ElementScoresCard from '../components/ElementScoresCard/ElementScoresCard
 import QuestionBreakdownCard from '../components/QuestionBreakDownCard/QuestionBreakDownCard'
 import InsightsCard from '../components/InsightsCard/InsightsCard'
 
-// ✅ Lazy load chart components
+// Lazy load chart components
 const LazyRadarChartCard = lazy(() => import('../components/RadarChartCard/RadarChartCard'))
 const LazyBarChartCard = lazy(() => import('../components/BarChartCard/BarChartCard'))
+const LazyGaugeChartCard = lazy(() => import('../components/GuageChartCard/GuageChartCard'))
 
 interface Props {
   instanceId: string
@@ -20,18 +21,22 @@ interface Props {
 export default function AssessmentResults({ instanceId }: Props) {
   const { results, loading, error } = useAssessmentResults(instanceId)
 
+  // Radar data — includes score and percentage to match RadarDataPoint interface
   const radarData = useMemo(() => {
     if (!results) return []
-    return Object.values(results.element_scores).map((el: any) => ({
+    return Object.values(results.element_scores).map((el) => ({
       element: el.element,
-      score: el.scores.percentage
+      score: el.scores.total_score,
+      percentage: el.scores.percentage
     }))
   }, [results])
 
+  // Bar data — includes score and percentage to match BarDataPoint interface
   const barData = useMemo(() => {
     if (!results) return []
-    return Object.values(results.element_scores).map((el: any) => ({
+    return Object.values(results.element_scores).map((el) => ({
       element: el.element,
+      score: el.scores.total_score,
       percentage: el.scores.percentage
     }))
   }, [results])
@@ -39,7 +44,11 @@ export default function AssessmentResults({ instanceId }: Props) {
   // Loading state
   if (loading)
     return (
-      <div style={{ textAlign: 'center', padding: '2rem' }}>
+      <div
+        style={{ textAlign: 'center', padding: '2rem' }}
+        role="status"
+        aria-live="polite"
+      >
         Loading results...
       </div>
     )
@@ -59,7 +68,11 @@ export default function AssessmentResults({ instanceId }: Props) {
   // No results found
   if (!results)
     return (
-      <div style={{ textAlign: 'center', padding: '2rem' }}>
+      <div
+        style={{ textAlign: 'center', padding: '2rem' }}
+        role="status"
+        aria-live="polite"
+      >
         No results to display
       </div>
     )
@@ -74,26 +87,36 @@ export default function AssessmentResults({ instanceId }: Props) {
         completion={results.completion_percentage}
         answered={results.answered_questions}
         total={results.total_questions}
+        element={results.instance.element}
       />
 
       {/* Score */}
       <ScoreCard scores={results.scores} />
 
-      {/* Charts (Lazy Loaded) */}
-      <Suspense fallback={<div>Loading Radar Chart...</div>}>
+      {/* Gauge Chart (Lazy Loaded) */}
+      <Suspense fallback={<div role="status">Loading Gauge Chart...</div>}>
+        <LazyGaugeChartCard
+          percentage={results.scores.percentage}
+          element={results.instance.element}
+        />
+      </Suspense>
+
+      {/* Radar Chart (Lazy Loaded) */}
+      <Suspense fallback={<div role="status">Loading Radar Chart...</div>}>
         <LazyRadarChartCard data={radarData} />
       </Suspense>
 
-      <Suspense fallback={<div>Loading Bar Chart...</div>}>
+      {/* Bar Chart (Lazy Loaded) */}
+      <Suspense fallback={<div role="status">Loading Bar Chart...</div>}>
         <LazyBarChartCard data={barData} />
       </Suspense>
 
       {/* Element Scores */}
       <ElementScoresCard elementScores={results.element_scores} />
 
-      {/* Question Breakdown */}
+      {/* Question Breakdown — one card per element */}
       {results.element_scores &&
-        Object.values(results.element_scores).map((el: any) =>
+        Object.values(results.element_scores).map((el) =>
           el.question_answers?.length > 0 ? (
             <QuestionBreakdownCard
               key={el.element}

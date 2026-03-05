@@ -1,5 +1,5 @@
 import { RadialBarChart, RadialBar, ResponsiveContainer } from 'recharts'
-import styles from './GaugeChartCard.module.css'
+import styles from './GuageChartCard.module.css'
 import { getScoreColor } from '../../utils/scoreUtils'
 
 interface Props {
